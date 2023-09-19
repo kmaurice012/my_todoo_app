@@ -43,15 +43,22 @@ class _RootState extends State<Root> {
       builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.data?.uid == null) {
-            //login screen
+            return const Scaffold(
+                body: Center(
+              child: Text("Loading..."),
+            ));
           } else {
 //home screen
+            return const Scaffold(
+                body: Center(
+              child: Text("Loading..."),
+            ));
           }
         } else {
-          // return const Scaffold(
-          //     body: Center(
-          //   child: Text("Loading..."),
-          // ));
+          return const Scaffold(
+              body: Center(
+            child: Text("Loading..."),
+          ));
         }
       },
     );

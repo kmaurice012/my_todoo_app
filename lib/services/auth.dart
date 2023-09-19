@@ -22,7 +22,7 @@ class Auth {
   }
 
   // ignore: non_constant_identifier_names
-  Future<String?> SignIn(String email, String password) async {
+  Future<String?> signIn(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(
           email: email.trim(), password: password.trim());
@@ -34,7 +34,7 @@ class Auth {
     }
   }
 
-  Future<String?> SignOut() async {
+  Future<String?> signOut() async {
     try {
       await auth.signOut();
       return "Success";
