@@ -8,7 +8,10 @@ class Login extends StatefulWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Login({super.key});
+  Login(
+      {super.key,
+      required FirebaseAuth auth,
+      required FirebaseFirestore firestore});
 
   @override
   State<Login> createState() => _LoginState();
@@ -23,21 +26,43 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(60.0),
+          padding: const EdgeInsets.all(50.0),
           child: Builder(builder: (BuildContext context) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+               const Text(
+                "Welcome Back",
+                 style:  TextStyle(
+                  fontWeight: FontWeight.bold,
+                  height:5,
+                  fontSize: 25,
+                  ),
+               ),
+                const SizedBox(
+                  height: 15,
+                ),
+                
                 TextFormField(
                   key: const ValueKey("username"),
                   textAlign: TextAlign.center,
-                  decoration: const InputDecoration(hintText: "Username"),
+                  decoration: const InputDecoration(
+                    hintText: "Username",
+                    border: OutlineInputBorder(),
+                    
+                  ),
                   controller: _emailController,
+                ),
+                 const SizedBox(
+                  height: 15,
                 ),
                 TextFormField(
                   key: const ValueKey("password"),
                   textAlign: TextAlign.center,
-                  decoration: const InputDecoration(hintText: "Password"),
+                  decoration: const InputDecoration(
+                      hintText: "Password",
+                       border: OutlineInputBorder()
+                  ),
                   controller: _passwordController,
                 ),
                 const SizedBox(
@@ -48,8 +73,8 @@ class _LoginState extends State<Login> {
                   onPressed: () async {
                     final String? retVal =
                         await Auth(auth: widget._auth).signIn(
-                      _emailController.text,
-                      _passwordController.text,
+                      email: _emailController.text,
+                      password: _passwordController.text,
                     );
                     if (retVal == "Success") {
                       _emailController.clear();
@@ -71,18 +96,20 @@ class _LoginState extends State<Login> {
                     onPressed: () async {
                       final String? retVal =
                           await Auth(auth: widget._auth).createAccount(
-                        _emailController.text,
-                        _passwordController.text,
+                        email: _emailController.text,
+                        password: _passwordController.text,
                       );
                       if (retVal == "Success") {
                         _emailController.clear();
                         _passwordController.clear();
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Sign in successful")),
+                        );
                       } else {
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(retVal!),
-                          ),
+                          SnackBar(content: Text(retVal!)),
                         );
                       }
                     },

@@ -7,7 +7,7 @@ import '../services/auth.dart';
 class Home extends StatefulWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Home({super.key});
+  Home({super.key, required FirebaseAuth auth, required FirebaseFirestore firestore});
 
   @override
   State<Home> createState() => _HomeState();

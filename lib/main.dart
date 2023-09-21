@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_todoo_app/services/auth.dart';
 import 'firebase_options.dart';
+import 'screens/home.dart';
+import 'screens/login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,10 +21,31 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Flutter Demo',
-      home: Root(),
-    );
+    return MaterialApp(
+        theme: ThemeData.dark(),
+        home: FutureBuilder(
+            future: Firebase.initializeApp(),
+            builder: (context, snapshot) {
+              //check for errors
+              if (snapshot.hasError) {
+                return const Scaffold(
+                  body: Center(
+                    child: Text("Error"),
+                  ),
+                );
+              }
+              // Once complete, show your application
+
+              if (snapshot.connectionState == ConnectionState.done) {
+                return const Root();
+              }
+              // Otherwise, show something whilst waiting for initialization to complete
+              return const Scaffold(
+                body: Center(
+                  child: Text("Loading..."),
+                ),
+              );
+            }));
   }
 }
 
@@ -43,16 +66,9 @@ class _RootState extends State<Root> {
       builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.data?.uid == null) {
-            return const Scaffold(
-                body: Center(
-              child: Text("Loading..."),
-            ));
+            return Login(auth: _auth, firestore: _firestore);
           } else {
-//home screen
-            return const Scaffold(
-                body: Center(
-              child: Text("Loading..."),
-            ));
+            return Home(auth: _auth, firestore: _firestore);
           }
         } else {
           return const Scaffold(

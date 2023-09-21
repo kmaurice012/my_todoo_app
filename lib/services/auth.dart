@@ -9,7 +9,7 @@ class Auth {
     return auth.authStateChanges();
   }
 
-  Future<String?> createAccount(String email, String password) async {
+  Future<String?> createAccount({required String email,required String password}) async {
     try {
       await auth.createUserWithEmailAndPassword(
           email: email.trim(), password: password);
@@ -22,7 +22,8 @@ class Auth {
   }
 
   // ignore: non_constant_identifier_names
-  Future<String?> signIn(String email, String password) async {
+  Future<String?> signIn(
+      {required String email, required String password}) async {
     try {
       await auth.signInWithEmailAndPassword(
           email: email.trim(), password: password.trim());
